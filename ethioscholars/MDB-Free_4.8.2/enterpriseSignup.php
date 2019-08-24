@@ -1,3 +1,37 @@
+<?php
+include_once '../controller/dbcontroller.php';
+if(isset($_POST['submit'])){
+$companyname=$_POST['companyname'];
+$companyemail=$_POST['companyemail'];
+$location=$_POST['location'];
+$companywebsite=$_POST['companywebsite'];
+$fax=$_POST['fax'];
+$postbox=$_POST['postbox'];
+$companyphone1=$_POST['companyphone1'];
+$companyphone2=$_POST['companyphone2'];
+$companyphone3=$_POST['companyphone3'];
+$fullname=$_POST['fullname'];
+$position=$_POST['position'];
+$address=$_POST['address'];
+$email=$_POST['email'];
+$username=$_POST['username'];
+$password=$_POST['password'];
+
+$db=new dbcontroller();
+  $result=$db->addenterprise_pass($username,$password);
+
+if($result=='1'){
+    $accId = $db->getId($username,$password);
+  $db->enterprisesignup($companyname,$companyemail,$location,$companywebsite,$fax,
+        $postbox,$companyphone1,$companyphone2,$companyphone3,$fullname,$position,$address,$email,$accId);
+       header("Location: landingpage.php"); 
+//    echo 'Enterprise Successfully signup';
+  }else{
+   echo 'Please try again';
+} 
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -62,13 +96,20 @@ a{
  a:hover {
     color: darkgray;
 }
+.buttonback {
+    background-color: white;
+    color: black;
+    border: 2px solid #e7e7e7;
+    margin-left: 1550px;
+    /*padding-top: 15px;*/
+}
     </style>
 </head>
 
 <body>
-   
+   <button class="button buttonback"><a href="landingpage.php">Back</a></button>
  <!-- Default form register -->
-<form class="text-center border border-light p-5" style="margin-right: 300px; margin-left: 300px; margin-top: 50px;">
+ <form class="text-center border border-light p-5" style="margin-right: 300px; margin-left: 300px; margin-top: 50px;" action="enterpriseSignup.php" method="post">
 
         <p class="h4 mb-4">Sign up</p>
         <fieldset>
@@ -76,12 +117,12 @@ a{
         <div class="form-row mb-4">
             <div class="col">
                 <!-- First name -->
-                <input type="text" id="defaultRegisterFormFirstName" class="form-control" placeholder="Company name">
+                <input type="text" id="defaultRegisterFormFirstName" class="form-control" placeholder="Company name" name="companyname" required>
             </div>
             
             <div class="col">
                     <!-- Last name -->
-                    <input type="email" id="defaultRegisterFormEmail" class="form-control mb-4" placeholder=" Company E-mail">
+                    <input type="email" id="defaultRegisterFormEmail" class="form-control mb-4" placeholder=" Company E-mail" name="companyemail" required>
      </div>
         </div>
      </fieldset>
@@ -89,14 +130,14 @@ a{
     <div class="form-row mb-4">
             <div class="col">
                 <!-- First name -->
-                <input type="text" id="defaultRegisterFormFirstName" class="form-control" placeholder="Location">
+                <input type="text" id="defaultRegisterFormFirstName" class="form-control" placeholder="Location" name="location" required>
             </div>
             
         </div>
         <div class="form-row mb-4">
                 <div class="col">
                     <!-- First name -->
-                    <input type="text" id="defaultRegisterFormFirstName" class="form-control" placeholder="Company Website">
+                    <input type="text" id="defaultRegisterFormFirstName" class="form-control" placeholder="Company Website" name="companywebsite" required>
                 </div>
                 
             </div>
@@ -104,28 +145,28 @@ a{
         <div class="form-row mb-4">
                 <div class="col">
                     <!-- First name -->
-                    <input type="text" id="defaultRegisterFormFirstName" class="form-control" placeholder="Fax">
+                    <input type="text" id="defaultRegisterFormFirstName" class="form-control" placeholder="Fax" name="fax" required>
                 </div>
                 
                 <div class="col">
                         <!-- Last name -->
-                        <input type="email" id="defaultRegisterFormEmail" class="form-control mb-4" placeholder=" PO Box">
+                        <input type="text" id="defaultRegisterFormEmail" class="form-control mb-4" placeholder=" PO Box" name="postbox" required>
          </div>
             </div>
 
             <div class="form-row mb-4">
                     <div class="col">
                         <!-- First name -->
-                        <input type="number" id="defaultRegisterFormFirstName" class="form-control" placeholder="Company Phone 1">
+                        <input type="number" id="defaultRegisterFormFirstName" class="form-control" placeholder="Company Phone 1" name="companyphone1" required>
                     </div>
                     
                     <div class="col">
                             <!-- Last name -->
-                            <input type="number" id="defaultRegisterFormEmail" class="form-control mb-4" placeholder=" Company Phone 2">
+                            <input type="number" id="defaultRegisterFormEmail" class="form-control mb-4" placeholder=" Company Phone 2" name="companyphone2" required>
              </div>
              <div class="col">
                     <!-- Last name -->
-                    <input type="number" id="defaultRegisterFormEmail" class="form-control mb-4" placeholder=" Company Phone 3">
+                    <input type="number" id="defaultRegisterFormEmail" class="form-control mb-4" placeholder=" Company Phone 3" name="companyphone3" required>
      </div>
                 </div>
                
@@ -136,7 +177,7 @@ a{
 <div class="form-row mb-4">
     <div class="col">
         <!-- First name -->
-        <input type="text" id="defaultRegisterFormFirstName" class="form-control" placeholder="Full name">
+        <input type="text" id="defaultRegisterFormFirstName" class="form-control" placeholder="Full name" name="fullname" required>
     </div>
     
   
@@ -146,21 +187,21 @@ a{
 <div class="form-row mb-4">
     <div class="col">
         <!-- First name -->
-        <input type="text" id="defaultRegisterFormFirstName" class="form-control" placeholder="position">
+        <input type="text" id="defaultRegisterFormFirstName" class="form-control" placeholder="position" name="position" required>
     </div>
     
 </div>
 <div class="form-row mb-4">
         <div class="col">
             <!-- First name -->
-            <input type="text" id="defaultRegisterFormFirstName" class="form-control" placeholder="Address">
+            <input type="text" id="defaultRegisterFormFirstName" class="form-control" placeholder="Address" name="address" required>
         </div>
         
     </div>
     <div class="form-row mb-4">
         <div class="col">
             <!-- First name -->
-            <input type="email" id="defaultRegisterFormEmail" class="form-control mb-4" placeholder="Email">
+            <input type="email" id="defaultRegisterFormEmail" class="form-control mb-4" placeholder="Email" name="email" required>
  
             </div>
         
@@ -169,24 +210,24 @@ a{
     <div class="form-row mb-4">
             <div class="col">
                 <!-- First name -->
-                <input type="number" id="defaultRegisterFormFirstName" class="form-control" placeholder="Username">
+                <input type="text" id="defaultRegisterFormFirstName" class="form-control" placeholder="Username" name="username" required>
             </div>
             
             <div class="col">
                     <!-- Last name -->
-                    <input type="number" id="defaultRegisterFormEmail" class="form-control mb-4" placeholder="Passoword">
+                    <input type="password" id="defaultRegisterFormEmail" class="form-control mb-4" placeholder="Passoword" name="password" requireds>
      </div>
-     <div class="col">
-            <!-- Last name -->
+<!--     <div class="col">
+             Last name 
             <input type="number" id="defaultRegisterFormEmail" class="form-control mb-4" placeholder="Confirm Password">
-</div>
+</div>-->
         </div>
        
 </div>
         <!-- Sign up button -->
      
         <!--<button type="button" class="btn btn-blue-grey"><a href="../MDB-Free_4.8.2/home.php">SIGN UP</a></button>-->
-            <button class="btn btn-white" type="submit"><a href="../MDB-Free_4.8.2/home.php">SIGN UP</a></button>
+        <button class="btn btn-white" type="submit" name="submit">SIGN UP</button>
         <!-- Social register -->
        
     </form>

@@ -3,7 +3,6 @@
      $active = "home";
        include_once './template/header.php';
         ?>  
-    <body>
         <!-- Main layout -->
 <!-- Section: Features v.3 -->
 <section class="my-5">
@@ -102,5 +101,3 @@
         <?php
         include_once './template/footer.php';
         ?>
-    </body>
-</html>

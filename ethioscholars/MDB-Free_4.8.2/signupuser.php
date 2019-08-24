@@ -1,3 +1,39 @@
+<?php
+include_once '../controller/dbcontroller.php';
+if(isset($_POST['submit'])){
+$firstname=$_POST['firstname'];
+$lastname=$_POST['lastname'];
+$email=$_POST['email'];
+$phonenumber=$_POST['phonenumber'];
+$address=$_POST['address'];
+$location=$_POST['location'];
+$educationallevel=$_POST['educationallevel'];
+$username=$_POST['username'];
+$password=$_POST['password'];
+
+  
+$db=new dbcontroller();
+  $result=$db->adduser_pass($username,$password);
+
+       
+if($result=='1'){
+    $accId = $db->getId($username,$password);
+   $db->usersignup($firstname,$lastname,$email,$phonenumber,$address,$location,$educationallevel,$accId);
+//        echo 'User Successfully signup';
+    header("Location: landingpage.php");
+     }else{
+   echo 'Please try again'; 
+}
+}
+?>
+ //<?php
+//function phpAlert($msg) {
+//   echo '<script type="text/javascript">alert("' . $msg . '")</script>';
+//   $msg="Sucessfully login";
+//}
+//?>
+
+
 <!DOCTYPE html>
 <!--
 To change this license header, choose License Headers in Project Properties.
@@ -34,7 +70,13 @@ and open the template in the editor.
       a:hover {
     color: darkgray;
 }
-
+.buttonback {
+    background-color: white;
+    color: black;
+    border: 2px solid #e7e7e7;
+    margin-left: 1550px;
+    /*padding-top: 15px;*/
+}
       
   </style>
     </head>
@@ -43,112 +85,64 @@ and open the template in the editor.
 //       include_once '../MDB-Free_4.8.2/header.php';
         ?>   
     <body>
+        <button class="button buttonback"><a href="landingpage.php">Back</a></button>
         <div class="signup">
          <div class="d-flex justify-content-center"> 
        <!-- Default form register -->
-<form class="text-center border border-light p-5">
+       <form></form>
+       <form action="signupuser.php" method="post" class="text-center border border-light p-5">
 
     <p class="h4 mb-4">Sign up</p>
 
     <div class="form-row mb-4">
         <div class="col">
             <!-- First name -->
-            <input type="text" id="defaultRegisterFormFirstName" class="form-control" placeholder="First name">
+            <input type="text" id="defaultRegisterFormFirstName" class="form-control" placeholder="First name" name="firstname" required>
         </div>
         <div class="col">
             <!-- Last name -->
-            <input type="text" id="defaultRegisterFormLastName" class="form-control" placeholder="Last name">
+            <input type="text" id="defaultRegisterFormLastName" class="form-control" placeholder="Last name" name="lastname" required>
         </div>
     </div>
      <!--<div class="col">-->
     <!-- E-mail -->
-    <input type="email" id="defaultRegisterFormEmail" class="form-control mb-4" placeholder="E-mail">
-     <!--</div>-->
-    
-<!--     Material input email 
-            <div class="col">
-                <i class="fa fa-exclamation-triangle prefix grey-text"></i>
-                <input type="email" id="defaultRegisterFormConfirmEmail" class="form-control mb-4 placeholder="Confirm your email">
-                <label for="materialFormCardConfirmEx" class="font-weight-light"></label>
-            </div>-->
-    <!--<div class="col">-->
-    <!-- Phone number -->
-    <input type="text" id="defaultRegisterPhonePassword" class="form-control" placeholder="Phone Number" aria-describedby="defaultRegisterFormPhoneHelpBlock">
-<!--    <small id="defaultRegisterFormPhoneHelpBlock" class="form-text text-muted mb-4">
-        Optional - for two step authentication
-    </small>-->
+    <input type="email" id="defaultRegisterFormEmail" class="form-control mb-4" placeholder="E-mail" name="email"  required>
+    <input type="text" id="defaultRegisterPhonePassword" class="form-control" placeholder="Phone Number" name="phonenumber" aria-describedby="defaultRegisterFormPhoneHelpBlock" required>
+     </br>
+     <input type="text" id="defaultRegisterFormAddress" class="form-control" placeholder="Address" name="address" required>
     <!--</div>-->
      </br>
-    <!--<div class="col">-->
-    <!--address-->
-    <input type="text" id="defaultRegisterFormAddress" class="form-control" placeholder="Address">
-    <!--</div>-->
-     </br>
-    <!--<div class="col">-->
-    <!--location-->
-    <input type="text" id="defaultRegisterFormLocation" class="form-control" placeholder="Location">
+     <input type="text" id="defaultRegisterFormLocation" class="form-control" placeholder="Location" name="location" required>
     <!--</div>-->
     </br>
     
      <!-- Subject -->
     <!--<label>Subject</label>-->
-    <select class="browser-default custom-select mb-4">
+    <select class="browser-default custom-select mb-4" name="educationallevel" required>
         <option value="" disabled>Choose option</option>
-        <option value="1" selected>Educational Level</option>
-        <option value="2">MS.c</option>
+        <option value="" selected>Educational Level</option>
+        <option value="MS.c">MS.c</option>
         <!--2-4 yr work exp. and publishing and community-->
-        <option value="3">Assistance Professor </option>
-        <option value="4">PHD</option>
-        <option value="5">Associate Professor</option>
-        <option value="6">Professor</option>
+        <option value="Assistance Professor">Assistance Professor </option>
+        <option value="PHD">PHD</option>
+        <option value="Associate Professor">Associate Professor</option>
+        <option value="Professor">Professor</option>
         
     </select>
 
     <!--username-->
-    <input type="text" id="defaultRegisterFormUsername" class="form-control" placeholder="Username">
+    <input type="text" id="defaultRegisterFormUsername" class="form-control" placeholder="Username" name="username" required>
     <!-- Password -->
      </br>
-    <input type="password" id="defaultRegisterFormPassword" class="form-control" placeholder="Password" aria-describedby="defaultRegisterFormPasswordHelpBlock">
+     <input type="password" id="defaultRegisterFormPassword" class="form-control" placeholder="Password" name="password" aria-describedby="defaultRegisterFormPasswordHelpBlock" required>
     <small id="defaultRegisterFormPasswordHelpBlock" class="form-text text-muted mb-4">
         At least 8 characters and 1 digit
     </small>
-     <input type="password" id="defaultRegisterFormPassword" class="form-control" placeholder="Confirm Password" aria-describedby="defaultRegisterFormPasswordHelpBlock">
-    
+     <!--<input type="password" id="defaultRegisterFormPassword" class="form-control" placeholder="Confirm Password" aria-describedby="defaultRegisterFormPasswordHelpBlock">-->
+     <button class="btn btn-white" type="submit" name="submit">SIGN UP</button>
+    <!--<button class="btn btn-white" >SIGN UP</button>-->
 
-    <!-- Newsletter -->
-<!--    <div class="custom-control custom-checkbox">
-        <input type="checkbox" class="custom-control-input" id="defaultRegisterFormNewsletter">
-        <label class="custom-control-label" for="defaultRegisterFormNewsletter">Subscribe to our newsletter</label>
-    </div>-->
-
-    <!-- Sign up button -->
-    <button class="btn btn-white" type="submit"><a href="../MDB-Free_4.8.2/home.php">SIGN UP</a></button>
-
-    <!-- Social register -->
-<!--    <p>or sign up with:</p>
-
-    <a type="button" class="light-blue-text mx-2">
-        <i class="fab fa-facebook-f"></i>
-    </a>
-    <a type="button" class="light-blue-text mx-2">
-        <i class="fab fa-twitter"></i>
-    </a>
-    <a type="button" class="light-blue-text mx-2">
-        <i class="fab fa-linkedin-in"></i>
-    </a>
-    <a type="button" class="light-blue-text mx-2">
-        <i class="fab fa-github"></i>
-    </a>-->
-
-    <!--<hr>-->
-
-<!--     Terms of service 
-    <p>By clicking
-        <em>Sign up</em> you agree to our
-        <a href="" target="_blank">terms of service</a>-->
-
-</form>
-<!-- Default form register -->
+   </form>
          </div>    
         </div>
          <?php

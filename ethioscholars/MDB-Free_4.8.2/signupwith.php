@@ -25,16 +25,7 @@
       a{
           color: black;
       }
-/*      a:link {
-    color: red;
-}*/
 
-/* visited link */
-/*a:visited {
-    color: gray;
-}*/
-
-/* mouse over link */
 a:hover {
     color: darkgray; 
 }

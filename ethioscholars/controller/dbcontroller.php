@@ -1,16 +1,5 @@
 <?php
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/**
- * Description of dbcontroller
- *
- * @author selam
- */
 class dbcontroller {
    private $conn;
     function __construct() {
@@ -21,23 +10,34 @@ class dbcontroller {
         $this->conn=$db->connect();
 }
 public function login($username, $password){
+        $pass=  md5($password);
+        $stm=$this->conn->prepare("select * from account where username=? and password=?");
+        $stm->bind_param("ss", $username, $pass);
+        $stm->execute();
+        $row = $stm->get_result();
+          if($row->num_rows>0){
+              return $row->fetch_assoc();
+             
+          }else {
+              return -1;
+    }
+}
+public function getId($username, $password){
+         
         $stm=$this->conn->prepare("select * from account where username=? and password=?");
         $stm->bind_param("ss", $username, $password);
         $stm->execute();
-        $stm->store_result();
-        if($stm->num_rows>0){
-              return 1;
-             
-          }else {
-              return 2;
-    }
+        $row = $stm->get_result()->fetch_assoc();
+        return $row['accountId'];
+        
 }
 public function enterprisesignup($companyname,$companyemail,$location,$companywebsite,$fax,$postbox,$companyphone1,
-        $companyphone2,$companyphone3,$fullname,$position,$address,$email,$username,$password){
-         $stm= $this->conn->prepare("insert into enterprisesignup(companyname,companyemail,location,companywebsite,fax,postbox,companyphone1,
-        companyphone2,companyphone3,fullname,position,address,email,username,password) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);");
-         $stm->bind_param("sssssssssssssss",$companyname,$companyemail,$location,$companywebsite,$fax,$postbox,$companyphone1,
-        $companyphone2,$companyphone3,$fullname,$position,$address,$email,$username,$password);
+        $companyphone2,$companyphone3,$fullname,$position,$address,$email,$accId){
+//     $pass=  md5($password); 
+         $stm= $this->conn->prepare("insert into enterprise(companyname,companyemail,location,companywebsite,fax,postbox,companyphone1,
+        companyphone2,companyphone3,fullname,position,address,email,accId) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?);");
+         $stm->bind_param("ssssssssssssss",$companyname,$companyemail,$location,$companywebsite,$fax,$postbox,$companyphone1,
+        $companyphone2,$companyphone3,$fullname,$position,$address,$email,$accId);
          if($stm->execute()){
              return 1;
              
@@ -46,9 +46,10 @@ public function enterprisesignup($companyname,$companyemail,$location,$companywe
          }
           
         }
-public function indpendentresearchersignup($firstname,$lastname,$email,$phonenumber,$address,$location,$educationallevel,$username,$password){
-         $stm= $this->conn->prepare("insert into indpendentresearchersignup(firstname,lastname,email,phonenumber,address,location,educationallevel,username,password)) values(?,?,?,?,?,?,?,?,?);");
-         $stm->bind_param("sssssssss",$firstname,$lastname,$email,$phonenumber,$address,$location,$educationallevel,$username,$password);
+         public function addenterprise_pass($username,$password){
+             $pass=  md5($password);
+         $stm= $this->conn->prepare("insert into account(username,password,role) values(?,?,'enterprise');");
+         $stm->bind_param("ss",$username,$pass);
          if($stm->execute()){
              return 1;
              
@@ -57,9 +58,10 @@ public function indpendentresearchersignup($firstname,$lastname,$email,$phonenum
          }
           
         }
-        public function usersignup($firstname,$lastname,$email,$phonenumber,$address,$location,$educationallevel,$username,$password){
-         $stm= $this->conn->prepare("insert into usersignup(firstname,lastname,email,phonenumber,address,location,educationallevel,username,password)) values(?,?,?,?,?,?,?,?,?);");
-         $stm->bind_param("sssssssss",$firstname,$lastname,$email,$phonenumber,$address,$location,$educationallevel,$username,$password);
+public function indpendentresearchersignup($firstname,$lastname,$email,$phonenumber,$address,$location,$educationallevel,$accId){
+//         $pass=  md5($password); 
+         $stm= $this->conn->prepare("insert into indpendentresearcher(firstname,lastname,email,phonenumber,address,location,educationallevel,accId) values(?,?,?,?,?,?,?,?);");
+         $stm->bind_param("ssssssss",$firstname,$lastname,$email,$phonenumber,$address,$location,$educationallevel,$accId);
          if($stm->execute()){
              return 1;
              
@@ -68,12 +70,63 @@ public function indpendentresearchersignup($firstname,$lastname,$email,$phonenum
          }
           
         }
+        public function addindpendentresearcher_pass($username,$password){
+             $pass=md5($password);
+         $stm= $this->conn->prepare("insert into account(username,password,role) values(?,?,'indpendentresearcher');");
+         $stm->bind_param("ss",$username,$pass);
+         if($stm->execute()){
+             return 1;
+             
+         }else{
+             return 2;
+         }
+          
+        }
+        
+        public function usersignup($firstname,$lastname,$email,$phonenumber,$address,$location,$educationallevel,$accId){
+//             $pass=  md5($password); 
+            $stm= $this->conn->prepare("insert into user(firstname,lastname,email,phonenumber,address,location,educationallevel,accId) values(?,?,?,?,?,?,?,?);");
+         $stm->bind_param("ssssssss",$firstname,$lastname,$email,$phonenumber,$address,$location,$educationallevel,$accId);
+         if($stm->execute()){
+             return 1;
+             
+         }else{
+             return 2;
+         }
+          
+        }
+        public function adduser_pass($username,$password){
+          $pass=  md5($password); 
+         $stm= $this->conn->prepare("insert into account(username,password,role) values(?,?,'user');");
+         $stm->bind_param("ss",$username,$pass);
+         if($stm->execute()){
+             return 1;
+             
+         }else{
+             return 2;
+         }
+          
+        }
+        
         public function universitysignup($institutionname,$institutionemail,$location,$institutionwebsite,$fax,$postbox,$institutionphone1,
-        $institutionphone2,$institutionphone3,$fullname,$position,$address,$email,$username,$password){
-         $stm= $this->conn->prepare("insert into universitysignup(institutionname,institutionemail,location,institutionwebsite,fax,postbox,institutionphone1,
-        institutionphone2,institutionphone3,fullname,position,address,email,username,password) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);");
-         $stm->bind_param("sssssssssssssss",$institutionname,$institutionemail,$location,$institutionwebsite,$fax,$postbox,$institutionphone1,
-        $institutionphone2,$institutionphone3,$fullname,$position,$address,$email,$username,$password);
+        $institutionphone2,$institutionphone3,$fullname,$position,$address,$email,$accId){
+//             $pass=  md5($password); 
+            $stm= $this->conn->prepare(" insert into university(institutionname,institutionemail,location,insititutionwebsite,fax,postbox,insititutionphone1,
+        insititutionphone2,insititutionphone3,fullname,position,address,email,accId) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?);");
+         $stm->bind_param("ssssssssssssss",$institutionname,$institutionemail,$location,$institutionwebsite,$fax,$postbox,$institutionphone1,
+        $institutionphone2,$institutionphone3,$fullname,$position,$address,$email,$accId);
+         if($stm->execute()){
+             return 1;
+            
+         }else{
+             return 2;
+         }
+          
+        }
+         public function adduniversity_pass($username,$password){
+              $pass=  md5($password); 
+         $stm= $this->conn->prepare("insert into account(username,password,role) values(?,?,'university');");
+         $stm->bind_param("ss",$username,$password);
          if($stm->execute()){
              return 1;
              

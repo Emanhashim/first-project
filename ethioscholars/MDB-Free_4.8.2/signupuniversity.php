@@ -1,3 +1,37 @@
+<?php
+include_once '../controller/dbcontroller.php';
+if(isset($_POST['submit'])){
+$institutionname=$_POST['institutionname'];
+$institutionemail=$_POST['institutionemail'];
+$location=$_POST['location'];
+$institutionwebsite=$_POST['institutionwebsite'];
+$fax=$_POST['fax'];
+$postbox=$_POST['postbox'];
+$institutionphone1=$_POST['institutionphone1'];
+$institutionphone2=$_POST['institutionphone2'];
+$institutionphone3=$_POST['institutionphone3'];
+$fullname=$_POST['fullname'];
+$position=$_POST['position'];
+$address=$_POST['address'];
+$email=$_POST['email'];
+$username=$_POST['username'];
+$password=$_POST['password'];
+
+$db=new dbcontroller();
+$result=$db->adduniversity_pass($username,$password);       
+if($result=='1'){
+    $accId = $db->getId($username,$password);
+    $result=$db->universitysignup($institutionname,$institutionemail,$location,$institutionwebsite,$fax,
+        $postbox,$institutionphone1,$institutionphone2,$institutionphone3,$fullname,$position,$address,$email,$accId);
+//    echo 'University Successfully signup';
+    header("Location: landingpage.php");
+}else{
+   echo 'Please try again';
+} 
+}
+    
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -63,13 +97,20 @@
       a:hover {
     color: darkgray;
 }
+.buttonback {
+    background-color: white;
+    color: black;
+    border: 2px solid #e7e7e7;
+    margin-left: 1550px;
+    padding-top: 15px;
+}
     </style>
 </head>
 
 <body>
 
-  
-<form class="text-center border border-light p-5" style="margin-right: 300px; margin-left: 300px; margin-top: 50px;">
+    <button class="button buttonback"><a href="landingpage.php">Back</a></button>
+    <form class="text-center border border-light p-5" style="margin-right: 300px; margin-left: 300px; margin-top: 50px;" action="signupuniversity.php" method="post">
 
         <p class="h4 mb-4">Sign up</p>
         <fieldset>
@@ -77,27 +118,27 @@
         <div class="form-row mb-4">
             <div class="col">
                 <!-- First name -->
-                <input type="text" id="defaultRegisterFormFirstName" class="form-control" placeholder="Inistitution name">
+         <input type="text" id="defaultRegisterFormFirstName" class="form-control" placeholder="Inistitution name" name="institutionname" required>
             </div>
             
             <div class="col">
                     <!-- Last name -->
-                    <input type="email" id="defaultRegisterFormEmail" class="form-control mb-4" placeholder="Institution  E-mail">
-     </div>
-        </div>
+         <input type="email" id="defaultRegisterFormEmail" class="form-control mb-4" placeholder="Institution  E-mail" name="institutionemail" required>
+           </div>
+          </div>
     </fieldset>
     
     <div class="form-row mb-4">
             <div class="col">
                 <!-- First name -->
-                <input type="text" id="defaultRegisterFormFirstName" class="form-control" placeholder="Location">
+        <input type="text" id="defaultRegisterFormFirstName" class="form-control" placeholder="Location" name="location" required>
             </div>
             
         </div>
         <div class="form-row mb-4">
                 <div class="col">
                     <!-- First name -->
-                    <input type="text" id="defaultRegisterFormFirstName" class="form-control" placeholder="Inistitution Website">
+       <input type="text" id="defaultRegisterFormFirstName" class="form-control" placeholder="Inistitution Website" name="institutionwebsite" required>
                 </div>
                 
             </div>
@@ -105,62 +146,62 @@
         <div class="form-row mb-4">
                 <div class="col">
                     <!-- First name -->
-                    <input type="text" id="defaultRegisterFormFirstName" class="form-control" placeholder="Fax">
+      <input type="text" id="defaultRegisterFormFirstName" class="form-control" placeholder="Fax" name="fax" required>
                 </div>
                 
                 <div class="col">
                         <!-- Last name -->
-                        <input type="email" id="defaultRegisterFormEmail" class="form-control mb-4" placeholder=" PO Box">
+       <input type="text" id="defaultRegisterFormEmail" class="form-control mb-4" placeholder=" PO Box" name="postbox" required>
          </div>
             </div>
 
             <div class="form-row mb-4">
                     <div class="col">
                         <!-- First name -->
-                        <input type="number" id="defaultRegisterFormFirstName" class="form-control" placeholder="Inistitution Phone 1">
+       <input type="number" id="defaultRegisterFormFirstName" class="form-control" placeholder="Inistitution Phone 1" name="institutionphone1" required>
                     </div>
                     
                     <div class="col">
                             <!-- Last name -->
-                            <input type="number" id="defaultRegisterFormEmail" class="form-control mb-4" placeholder=" Inistitution Phone 2">
+       <input type="number" id="defaultRegisterFormEmail" class="form-control mb-4" placeholder=" Inistitution Phone 2" name="institutionphone2" required>
              </div>
              <div class="col">
                     <!-- Last name -->
-                    <input type="number" id="defaultRegisterFormEmail" class="form-control mb-4" placeholder=" Inistitution Phone 3">
-     </div>
-                </div>
+       <input type="number" id="defaultRegisterFormEmail" class="form-control mb-4" placeholder=" Inistitution Phone 3" name="institutionphone3" required>
+              </div>
+              </div>
 <hr>
 
-<fieldset>
-        <legend>Employee Information</legend>
-<div class="form-row mb-4">
-    <div class="col">
-        <!-- First name -->
-        <input type="text" id="defaultRegisterFormFirstName" class="form-control" placeholder="Full name">
-    </div>
-    
-  
-</div>
-</fieldset>
+                    <fieldset>
+                  <legend>Employee Information</legend>
+              <div class="form-row mb-4">
+              <div class="col">
+                  <!-- First name -->
+                  <input type="text" id="defaultRegisterFormFirstName" class="form-control" placeholder="Full name" name="fullname" required>
+              </div>
 
-<div class="form-row mb-4">
-    <div class="col">
-        <!-- First name -->
-        <input type="text" id="defaultRegisterFormFirstName" class="form-control" placeholder="position">
-    </div>
-    
-</div>
-<div class="form-row mb-4">
-        <div class="col">
-            <!-- First name -->
-            <input type="text" id="defaultRegisterFormFirstName" class="form-control" placeholder="Address">
-        </div>
-        
+
+                   </div>
+                   </fieldset>
+
+            <div class="form-row mb-4">
+                <div class="col">
+                    <!-- First name -->
+         <input type="text" id="defaultRegisterFormFirstName" class="form-control" placeholder="position" name="position" required>
+                </div>
+
+            </div>
+            <div class="form-row mb-4">
+                    <div class="col">
+                        <!-- First name -->
+                        <input type="text" id="defaultRegisterFormFirstName" class="form-control" placeholder="Address" name="address" required>
+                    </div>
+
     </div>
     <div class="form-row mb-4">
         <div class="col">
             <!-- First name -->
-            <input type="email" id="defaultRegisterFormEmail" class="form-control mb-4" placeholder="Email">
+            <input type="email" id="defaultRegisterFormEmail" class="form-control mb-4" placeholder="Email" name="email" required>
  
             </div>
         
@@ -169,23 +210,23 @@
     <div class="form-row mb-4">
             <div class="col">
                 <!-- First name -->
-                <input type="number" id="defaultRegisterFormFirstName" class="form-control" placeholder="Username">
+                <input type="text" id="defaultRegisterFormFirstName" class="form-control" placeholder="Username" name="username" required>
             </div>
             
             <div class="col">
                     <!-- Last name -->
-                    <input type="number" id="defaultRegisterFormEmail" class="form-control mb-4" placeholder="Passoword">
+                    <input type="password" id="defaultRegisterFormEmail" class="form-control mb-4" placeholder="Password" name="password" required>
      </div>
-     <div class="col">
-            <!-- Last name -->
+<!--     <div class="col">
+             Last name 
             <input type="number" id="defaultRegisterFormEmail" class="form-control mb-4" placeholder="Confirm Password">
-</div>
+</div>-->
         </div>
     
         <!-- Sign up button -->
      
         <!--<button type="button" class="btn btn-blue-grey"><a href="../MDB-Free_4.8.2/home.php">SIGN UP</a></button>-->
-          <button class="btn btn-white" type="submit"><a href="../MDB-Free_4.8.2/home.php">SIGN UP</a></button>
+          <button class="btn btn-white" type="submit" name="submit">SIGN UP</button>
         <!-- Social register -->
        
     </form>

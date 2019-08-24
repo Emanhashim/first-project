@@ -1,3 +1,25 @@
+<?php
+$output = "";
+include_once '../controller/dbcontroller.php';
+if(isset($_POST['submit'])){
+    $username=$_POST['username'];
+$password=$_POST['password'];
+
+$db=new dbcontroller();
+$result=$db->login($username,$password);
+if($result== -1){
+ $output =  'Incorrect username or password';    
+}else{
+    session_start();
+    $_SESSION['role'] = $result['role'];
+    header("Location: home.php");
+} 
+  
+}
+?>
+
+
+
 <!DOCTYPE html>
 
 <!--To change this license header, choose License Headers in Project Properties.
@@ -66,32 +88,24 @@ a{
             <h3 class="deep-grey-text mt-3 mb-4 pb-1 mx-5">Log in</h3>
         </div>
        </div>
-          <form action="../model/dblogin.php" method="POST">
+           <form action=login.php method="POST">
              <div class="card-body mx-4 mt-4">
-                 <table>
-                     <tr>
-                     <td>User Type</td>
-                     <td><select name="type">
-                         <option value="-1>">Select User Type </option>  
-                           <option value="-1>">Enterprise  </option>  
-                           <option value="-1>">Users </option>  
-                           <option value="-1>">Independent Researcher </option> 
-                           <option value="-1>">University </option> 
-                           </select>
-                     </td>
-                     </tr>
-                 </table>
-                 <br>
+           
+                
             <div class="md-form">
-            <input type="text" id="Form-username" class="form-control">
+                <input type="text" id="Form-username" class="form-control" name="username">
             <label for="Form-username">Your Username</label>
             </div>
              <div class="md-form">
-            <input type="password" id="Form-pass4" class="form-control">
+                 <input type="password" id="Form-pass4" class="form-control" name="password">
             <label for="Form-pass4">Your password</label>
              </div>
+                 
             <div class="text-center mb-4">
-            <button type="button" class="btn btn-white"> <a href="../MDB-Free_4.8.2/home.php">Log in</a></button> 
+            <button class="btn btn-white" type="submit" name="submit">Login</button>
+            <p class="text-danger"><?php echo $output;?></p>
+            
+            <!--<button type="button" class="btn btn-white">Log in</button>--> 
            </div>
            <p class="font-small grey-text d-flex justify-content-center">Don't have an account? <a href="../MDB-Free_4.8.2/landingpage.php" class="dark-grey-text font-weight-bold ml-1"> Sign up</a></p>
             </div>

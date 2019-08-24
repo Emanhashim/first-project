@@ -21,10 +21,13 @@ class dbconnect {
   $host='localhost';
   $user='root';
   $pass='';
-  $dbname='ethioscholars';
+  $dbname='ethioscholar';
   
-  $this->conn=new mysqli($host, $user, $pass, $dbname);
-  
+//  $this->conn=new mysqli($host, $user, $pass, $dbname);
+   $this->conn = mysqli_connect($host,$user,$pass,$dbname) or die($error);
+   if(mysqli_connect_error()){
+       echo 'Error:'.  mysqli_connect_error();
+   }
   return $this->conn;
   }
 }
